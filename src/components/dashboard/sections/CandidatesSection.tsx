@@ -29,6 +29,7 @@ import {
 } from "../../ui/select";
 import { Checkbox } from "../../ui/checkbox";
 import { Download, Eye, Filter, Search, UserPlus } from "lucide-react";
+import { Routes, Route, Link } from "react-router-dom";
 
 interface Candidate {
   id: string;
@@ -82,8 +83,8 @@ const CandidatesSection = ({
     }
   };
 
-  return (
-    <div className="p-6 bg-white w-full h-full">
+  const AllCandidatesView = () => (
+    <>
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Candidates Management</h1>
         <Button className="flex items-center gap-2">
@@ -219,6 +220,50 @@ const CandidatesSection = ({
           </CardContent>
         </Card>
       </div>
+    </>
+  );
+
+  const NewApplicationsView = () => (
+    <div className="p-6">
+      <h1 className="text-2xl font-bold mb-6">New Applications</h1>
+      <Card>
+        <CardContent className="p-6">
+          <p>New applications content will be displayed here.</p>
+        </CardContent>
+      </Card>
+    </div>
+  );
+
+  const ShortlistedView = () => (
+    <div className="p-6">
+      <h1 className="text-2xl font-bold mb-6">Shortlisted Candidates</h1>
+      <Card>
+        <CardContent className="p-6">
+          <p>Shortlisted candidates content will be displayed here.</p>
+        </CardContent>
+      </Card>
+    </div>
+  );
+
+  const InterviewsView = () => (
+    <div className="p-6">
+      <h1 className="text-2xl font-bold mb-6">Interviews</h1>
+      <Card>
+        <CardContent className="p-6">
+          <p>Interviews content will be displayed here.</p>
+        </CardContent>
+      </Card>
+    </div>
+  );
+
+  return (
+    <div className="p-6 bg-white w-full h-full">
+      <Routes>
+        <Route path="/" element={<AllCandidatesView />} />
+        <Route path="/new" element={<NewApplicationsView />} />
+        <Route path="/shortlisted" element={<ShortlistedView />} />
+        <Route path="/interviews" element={<InterviewsView />} />
+      </Routes>
     </div>
   );
 };

@@ -53,6 +53,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Routes, Route, Link } from "react-router-dom";
 
 interface JobPosting {
   id: string;
@@ -66,7 +67,7 @@ interface JobPosting {
 }
 
 const RecruitmentSection = () => {
-  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(true);
+  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [selectedJob, setSelectedJob] = useState<JobPosting | null>(null);
 
@@ -157,8 +158,8 @@ const RecruitmentSection = () => {
     }
   };
 
-  return (
-    <div className="p-6 bg-white h-full">
+  const JobListingsView = () => (
+    <>
       <div className="flex justify-between items-center mb-6">
         <div>
           <h1 className="text-2xl font-bold">Recruitment Management</h1>
@@ -166,114 +167,12 @@ const RecruitmentSection = () => {
             Manage job postings and track applicants
           </p>
         </div>
-        <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
-          <DialogTrigger asChild>
-            <Button className="flex items-center gap-2">
-              <Plus size={16} />
-              Create Job Posting
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-[600px]">
-            <DialogHeader>
-              <DialogTitle>Create New Job Posting</DialogTitle>
-              <DialogDescription>
-                Fill in the details for the new job position.
-              </DialogDescription>
-            </DialogHeader>
-            <div className="grid gap-4 py-4">
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="title" className="text-right">
-                  Job Title
-                </Label>
-                <Input
-                  id="title"
-                  className="col-span-3"
-                  placeholder="e.g. Senior Frontend Developer"
-                />
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="department" className="text-right">
-                  Department
-                </Label>
-                <Select>
-                  <SelectTrigger className="col-span-3">
-                    <SelectValue placeholder="Select department" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="engineering">Engineering</SelectItem>
-                    <SelectItem value="design">Design</SelectItem>
-                    <SelectItem value="marketing">Marketing</SelectItem>
-                    <SelectItem value="hr">Human Resources</SelectItem>
-                    <SelectItem value="finance">Finance</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="location" className="text-right">
-                  Location
-                </Label>
-                <Input
-                  id="location"
-                  className="col-span-3"
-                  placeholder="e.g. Remote, New York"
-                />
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="type" className="text-right">
-                  Job Type
-                </Label>
-                <Select>
-                  <SelectTrigger className="col-span-3">
-                    <SelectValue placeholder="Select job type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="full-time">Full-time</SelectItem>
-                    <SelectItem value="part-time">Part-time</SelectItem>
-                    <SelectItem value="contract">Contract</SelectItem>
-                    <SelectItem value="internship">Internship</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="description" className="text-right">
-                  Description
-                </Label>
-                <Textarea
-                  id="description"
-                  className="col-span-3"
-                  placeholder="Job description..."
-                />
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="requirements" className="text-right">
-                  Requirements
-                </Label>
-                <Textarea
-                  id="requirements"
-                  className="col-span-3"
-                  placeholder="Job requirements..."
-                />
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="status" className="text-right">
-                  Status
-                </Label>
-                <Select>
-                  <SelectTrigger className="col-span-3">
-                    <SelectValue placeholder="Select status" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="published">Published</SelectItem>
-                    <SelectItem value="draft">Draft</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-            <DialogFooter>
-              <Button type="submit">Create Job Posting</Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+        <Link to="/dashboard/recruitment/new">
+          <Button className="flex items-center gap-2">
+            <Plus size={16} />
+            Create Job Posting
+          </Button>
+        </Link>
       </div>
 
       <div className="mb-6">
@@ -680,6 +579,135 @@ const RecruitmentSection = () => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+    </>
+  );
+
+  const CreateJobView = () => (
+    <div className="p-6">
+      <div className="flex items-center mb-6">
+        <Link to="/dashboard/recruitment" className="mr-4">
+          <Button variant="outline">Back</Button>
+        </Link>
+        <h1 className="text-2xl font-bold">Create New Job Posting</h1>
+      </div>
+
+      <Card>
+        <CardContent className="p-6">
+          <div className="grid gap-4 py-4">
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="title" className="text-right">
+                Job Title
+              </Label>
+              <Input
+                id="title"
+                className="col-span-3"
+                placeholder="e.g. Senior Frontend Developer"
+              />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="department" className="text-right">
+                Department
+              </Label>
+              <Select>
+                <SelectTrigger className="col-span-3">
+                  <SelectValue placeholder="Select department" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="engineering">Engineering</SelectItem>
+                  <SelectItem value="design">Design</SelectItem>
+                  <SelectItem value="marketing">Marketing</SelectItem>
+                  <SelectItem value="hr">Human Resources</SelectItem>
+                  <SelectItem value="finance">Finance</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="location" className="text-right">
+                Location
+              </Label>
+              <Input
+                id="location"
+                className="col-span-3"
+                placeholder="e.g. Remote, New York"
+              />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="type" className="text-right">
+                Job Type
+              </Label>
+              <Select>
+                <SelectTrigger className="col-span-3">
+                  <SelectValue placeholder="Select job type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="full-time">Full-time</SelectItem>
+                  <SelectItem value="part-time">Part-time</SelectItem>
+                  <SelectItem value="contract">Contract</SelectItem>
+                  <SelectItem value="internship">Internship</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="description" className="text-right">
+                Description
+              </Label>
+              <Textarea
+                id="description"
+                className="col-span-3"
+                placeholder="Job description..."
+              />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="requirements" className="text-right">
+                Requirements
+              </Label>
+              <Textarea
+                id="requirements"
+                className="col-span-3"
+                placeholder="Job requirements..."
+              />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="status" className="text-right">
+                Status
+              </Label>
+              <Select>
+                <SelectTrigger className="col-span-3">
+                  <SelectValue placeholder="Select status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="published">Published</SelectItem>
+                  <SelectItem value="draft">Draft</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          <div className="flex justify-end mt-6">
+            <Button type="submit">Create Job Posting</Button>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+
+  const PublishedJobsView = () => (
+    <div className="p-6">
+      <h1 className="text-2xl font-bold mb-6">Published Jobs</h1>
+      <Card>
+        <CardContent className="p-6">
+          <p>Published jobs content will be displayed here.</p>
+        </CardContent>
+      </Card>
+    </div>
+  );
+
+  return (
+    <div className="p-6 bg-white h-full">
+      <Routes>
+        <Route path="/" element={<JobListingsView />} />
+        <Route path="/new" element={<CreateJobView />} />
+        <Route path="/published" element={<PublishedJobsView />} />
+      </Routes>
     </div>
   );
 };

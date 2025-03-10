@@ -82,8 +82,8 @@ const JobDetails = ({
     "Generous paid time off policy",
   ],
   companyDescription = "TechCorp Solutions is a leading technology company specializing in cloud-based enterprise solutions. With offices worldwide, we serve clients across various industries, providing innovative software solutions that drive business growth.",
-  onBack = () => console.log("Back button clicked"),
-  onApply = () => console.log("Apply button clicked"),
+  onBack = () => {},
+  onApply = () => {},
 }: JobDetailsProps) => {
   return (
     <div className="bg-gray-50 min-h-screen p-6">
@@ -103,30 +103,6 @@ const JobDetails = ({
                 <span>{location}</span>
               </div>
             </div>
-            <Dialog>
-              <DialogTrigger asChild>
-                <Button size="lg" className="bg-blue-600 hover:bg-blue-700">
-                  Apply Now
-                </Button>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Apply for {title}</DialogTitle>
-                  <DialogDescription>
-                    You're about to apply for the {title} position at {company}.
-                  </DialogDescription>
-                </DialogHeader>
-                <div className="py-4">
-                  <p>Would you like to proceed with your application?</p>
-                </div>
-                <DialogFooter>
-                  <Button variant="outline" onClick={() => {}}>
-                    Cancel
-                  </Button>
-                  <Button onClick={onApply}>Continue to Application</Button>
-                </DialogFooter>
-              </DialogContent>
-            </Dialog>
           </div>
 
           <div className="flex flex-wrap gap-3 mt-4">
@@ -244,7 +220,7 @@ const JobDetails = ({
               className="bg-blue-600 hover:bg-blue-700"
               onClick={onApply}
             >
-              Apply for this Position
+              Apply Now
             </Button>
           </div>
         </div>
