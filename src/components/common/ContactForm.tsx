@@ -21,16 +21,22 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { CheckCircle, Mail, Phone, MapPin } from "lucide-react";
+import {
+  CheckCircle,
+  Mail,
+  Phone,
+  MapPin,
+  Upload,
+  FileText,
+} from "lucide-react";
 
 const formSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
   email: z.string().email({ message: "Please enter a valid email address." }),
   phone: z.string().optional(),
-  subject: z.string().min(1, { message: "Please select a subject." }),
-  message: z
+  candidatePosition: z
     .string()
-    .min(10, { message: "Message must be at least 10 characters." }),
+    .min(1, { message: "Please enter the position you're applying for." }),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -38,6 +44,7 @@ type FormValues = z.infer<typeof formSchema>;
 const ContactForm = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [cvFile, setCvFile] = useState<File | null>(null);
 
   const {
     register,
@@ -50,10 +57,15 @@ const ContactForm = () => {
       name: "",
       email: "",
       phone: "",
-      subject: "",
-      message: "",
+      candidatePosition: "",
     },
   });
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setCvFile(e.target.files[0]);
+    }
+  };
 
   const onSubmit = (data: FormValues) => {
     setIsSubmitting(true);
@@ -61,9 +73,11 @@ const ContactForm = () => {
     // Simulate API call
     setTimeout(() => {
       console.log("Form submitted:", data);
+      console.log("CV file:", cvFile);
       setIsSubmitting(false);
       setIsSubmitted(true);
       reset();
+      setCvFile(null);
     }, 1500);
   };
 
@@ -76,7 +90,8 @@ const ContactForm = () => {
               Contact Us
             </h1>
             <p className="text-xl text-gray-600">
-              Have questions or feedback? We'd love to hear from you.
+              Apply for a position or send us your questions. We'd love to hear
+              from you.
             </p>
           </div>
 
@@ -87,24 +102,24 @@ const ContactForm = () => {
                   <CardContent className="flex flex-col items-center justify-center p-10 text-center">
                     <CheckCircle className="w-16 h-16 text-green-500 mb-4" />
                     <CardTitle className="text-2xl mb-2">
-                      Message Sent!
+                      Application Submitted!
                     </CardTitle>
                     <CardDescription className="text-lg mb-6">
-                      Thank you for contacting us. We'll get back to you as soon
-                      as possible.
+                      Thank you for your application. We'll review your CV and
+                      get back to you if your profile matches our requirements.
                     </CardDescription>
                     <Button onClick={() => setIsSubmitted(false)}>
-                      Send Another Message
+                      Submit Another Application
                     </Button>
                   </CardContent>
                 </Card>
               ) : (
                 <Card>
                   <CardHeader>
-                    <CardTitle>Send us a message</CardTitle>
+                    <CardTitle>Apply for a position</CardTitle>
                     <CardDescription>
-                      Fill out the form below and we'll respond as soon as
-                      possible.
+                      Fill out the form below and upload your CV to apply for a
+                      position.
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
@@ -154,63 +169,61 @@ const ContactForm = () => {
                           />
                         </div>
                         <div className="space-y-2">
-                          <Label htmlFor="subject">Subject *</Label>
-                          <Select
-                            onValueChange={(value) =>
-                              register("subject").onChange({
-                                target: { value },
-                              })
+                          <Label htmlFor="candidatePosition">
+                            Candidate Position *
+                          </Label>
+                          <Input
+                            id="candidatePosition"
+                            placeholder="Position you're applying for"
+                            {...register("candidatePosition")}
+                            className={
+                              errors.candidatePosition ? "border-red-500" : ""
                             }
-                          >
-                            <SelectTrigger id="subject">
-                              <SelectValue placeholder="Select a subject" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="general">
-                                General Inquiry
-                              </SelectItem>
-                              <SelectItem value="support">
-                                Technical Support
-                              </SelectItem>
-                              <SelectItem value="billing">
-                                Billing Question
-                              </SelectItem>
-                              <SelectItem value="feedback">Feedback</SelectItem>
-                              <SelectItem value="partnership">
-                                Partnership Opportunity
-                              </SelectItem>
-                            </SelectContent>
-                          </Select>
-                          {errors.subject && (
+                          />
+                          {errors.candidatePosition && (
                             <p className="text-sm text-red-500">
-                              {errors.subject.message}
+                              {errors.candidatePosition.message}
                             </p>
                           )}
                         </div>
                       </div>
 
                       <div className="space-y-2">
-                        <Label htmlFor="message">Message *</Label>
-                        <Textarea
-                          id="message"
-                          placeholder="Please provide details about your inquiry..."
-                          rows={6}
-                          {...register("message")}
-                          className={errors.message ? "border-red-500" : ""}
-                        />
-                        {errors.message && (
-                          <p className="text-sm text-red-500">
-                            {errors.message.message}
-                          </p>
-                        )}
+                        <Label htmlFor="cv-upload">CV/Resume *</Label>
+                        <div className="flex items-center gap-4">
+                          <label
+                            htmlFor="cv-upload"
+                            className="flex items-center gap-2 px-4 py-2 border border-input rounded-md bg-background hover:bg-accent hover:text-accent-foreground cursor-pointer"
+                          >
+                            <Upload className="h-4 w-4" />
+                            <span>Upload CV</span>
+                            <input
+                              id="cv-upload"
+                              type="file"
+                              accept=".pdf,.doc,.docx"
+                              className="hidden"
+                              onChange={handleFileChange}
+                              required
+                            />
+                          </label>
+                          {cvFile && (
+                            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                              <FileText className="h-4 w-4" />
+                              <span>{cvFile.name}</span>
+                            </div>
+                          )}
+                        </div>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          Accepted formats: PDF, DOC, DOCX. Max size: 5MB
+                        </p>
                       </div>
 
                       <Button
                         type="submit"
                         className="w-full"
-                        disabled={isSubmitting}
+                        disabled={isSubmitting || !cvFile}
                       >
-                        {isSubmitting ? "Sending..." : "Send Message"}
+                        {isSubmitting ? "Submitting..." : "Submit Application"}
                       </Button>
                     </form>
                   </CardContent>
@@ -267,27 +280,30 @@ const ContactForm = () => {
                 <CardContent className="space-y-4">
                   <div>
                     <h3 className="font-medium">
-                      How quickly will I receive a response?
+                      How quickly will I receive a response to my application?
                     </h3>
                     <p className="text-gray-600 text-sm mt-1">
-                      We typically respond to all inquiries within 24-48
-                      business hours.
+                      We typically review all applications within 1-2 weeks and
+                      will contact you if your profile matches our requirements.
                     </p>
                   </div>
                   <div>
                     <h3 className="font-medium">
-                      Do you offer technical support?
+                      What happens after I submit my application?
                     </h3>
                     <p className="text-gray-600 text-sm mt-1">
-                      Yes, our support team is available to help with any
-                      technical issues you may encounter.
+                      Our HR team will review your application and contact you
+                      for an interview if your qualifications match our
+                      requirements.
                     </p>
                   </div>
                   <div>
-                    <h3 className="font-medium">Can I request a demo?</h3>
+                    <h3 className="font-medium">
+                      Can I apply for multiple positions?
+                    </h3>
                     <p className="text-gray-600 text-sm mt-1">
-                      Absolutely! Select "Partnership Opportunity" in the
-                      subject dropdown and mention you'd like a demo.
+                      Yes, you can submit separate applications for different
+                      positions that match your qualifications and career goals.
                     </p>
                   </div>
                 </CardContent>

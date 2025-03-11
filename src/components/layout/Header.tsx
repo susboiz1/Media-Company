@@ -76,73 +76,14 @@ const Header = ({
               </NavigationMenuItem>
 
               <NavigationMenuItem>
-                <NavigationMenuTrigger className="text-sm font-medium text-gray-700 hover:text-primary transition-colors">
-                  Jobs
-                </NavigationMenuTrigger>
-                <NavigationMenuContent>
-                  <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2">
-                    <li>
-                      <NavigationMenuLink asChild>
-                        <Link
-                          to="/jobs"
-                          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                        >
-                          <div className="text-sm font-medium leading-none">
-                            Browse Jobs
-                          </div>
-                          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                            Explore all available job positions
-                          </p>
-                        </Link>
-                      </NavigationMenuLink>
-                    </li>
-                    <li>
-                      <NavigationMenuLink asChild>
-                        <Link
-                          to="/jobs/categories"
-                          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                        >
-                          <div className="text-sm font-medium leading-none">
-                            Job Categories
-                          </div>
-                          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                            Browse jobs by department or type
-                          </p>
-                        </Link>
-                      </NavigationMenuLink>
-                    </li>
-                    <li>
-                      <NavigationMenuLink asChild>
-                        <Link
-                          to="/jobs/featured"
-                          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                        >
-                          <div className="text-sm font-medium leading-none">
-                            Featured Positions
-                          </div>
-                          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                            Highlighted job opportunities
-                          </p>
-                        </Link>
-                      </NavigationMenuLink>
-                    </li>
-                    <li>
-                      <NavigationMenuLink asChild>
-                        <Link
-                          to="/jobs/remote"
-                          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                        >
-                          <div className="text-sm font-medium leading-none">
-                            Remote Jobs
-                          </div>
-                          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                            Work from anywhere opportunities
-                          </p>
-                        </Link>
-                      </NavigationMenuLink>
-                    </li>
-                  </ul>
-                </NavigationMenuContent>
+                <NavigationMenuLink
+                  className={cn(
+                    "px-4 py-2 text-sm font-medium text-gray-700 hover:text-primary transition-colors",
+                  )}
+                  asChild
+                >
+                  <Link to="/jobs">Jobs</Link>
+                </NavigationMenuLink>
               </NavigationMenuItem>
 
               <NavigationMenuItem>
@@ -305,43 +246,13 @@ const Header = ({
               Home
             </Link>
             <div className="relative">
-              <button
-                className="w-full flex items-center justify-between px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md"
-                onClick={(e) => e.preventDefault()}
+              <Link
+                to="/jobs"
+                className="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md"
+                onClick={closeMenu}
               >
-                <span>Jobs</span>
-                <ChevronDown className="h-4 w-4" />
-              </button>
-              <div className="pl-4 mt-2 space-y-2">
-                <Link
-                  to="/jobs"
-                  className="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md"
-                  onClick={closeMenu}
-                >
-                  Browse Jobs
-                </Link>
-                <Link
-                  to="/jobs/categories"
-                  className="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md"
-                  onClick={closeMenu}
-                >
-                  Job Categories
-                </Link>
-                <Link
-                  to="/jobs/featured"
-                  className="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md"
-                  onClick={closeMenu}
-                >
-                  Featured Positions
-                </Link>
-                <Link
-                  to="/jobs/remote"
-                  className="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md"
-                  onClick={closeMenu}
-                >
-                  Remote Jobs
-                </Link>
-              </div>
+                Jobs
+              </Link>
             </div>
             <Link
               to="/about"

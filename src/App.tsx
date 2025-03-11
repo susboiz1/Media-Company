@@ -3,8 +3,7 @@ import { useRoutes, Routes, Route } from "react-router-dom";
 import Home from "./components/home";
 import routes from "tempo-routes";
 import Header from "./components/layout/Header";
-import FeaturedPositions from "./components/common/FeaturedPositions";
-import RemoteJobs from "./components/common/RemoteJobs";
+import JobsPage from "./components/common/JobsPage";
 
 // Lazy load components
 const JobListings = lazy(() => import("./components/candidate/JobListings"));
@@ -38,9 +37,7 @@ function App() {
         {/* Add margin-top to account for fixed header */}
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/jobs" element={<JobListings />} />
-          <Route path="/jobs/featured" element={<FeaturedPositions />} />
-          <Route path="/jobs/remote" element={<RemoteJobs />} />
+          <Route path="/jobs" element={<JobsPage />} />
           <Route path="/jobs/:id" element={<JobDetails />} />
           <Route path="/apply/:id" element={<ApplicationForm />} />
           <Route path="/candidate" element={<CandidatePortal />} />
