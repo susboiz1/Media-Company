@@ -239,8 +239,11 @@ const JobsPage = () => {
                         {job.description}
                       </p>
                     </div>
-                    <Link to={`/jobs/${job.id}`}>
-                      <Button>Apply Now</Button>
+                    <Link
+                      to={`/jobs/${job.id}`}
+                      className="text-blue-600 hover:underline text-sm font-medium"
+                    >
+                      View Details
                     </Link>
                   </div>
                 </CardContent>

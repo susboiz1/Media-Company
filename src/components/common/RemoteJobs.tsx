@@ -327,7 +327,7 @@ const RemoteJobs = () => {
                 </div>
               </div>
               <div className="flex flex-col justify-center gap-4">
-                <Link to="/jobs/1">
+                <Link to="/contact">
                   <Button size="lg" className="w-full md:w-auto">
                     Apply Now
                   </Button>
@@ -412,7 +412,7 @@ const RemoteJobs = () => {
                         </div>
                       </div>
                       <div className="flex flex-col gap-2">
-                        <Link to={`/jobs/${job.id}`}>
+                        <Link to="/contact">
                           <Button className="w-full md:w-auto">
                             Apply Now
                           </Button>

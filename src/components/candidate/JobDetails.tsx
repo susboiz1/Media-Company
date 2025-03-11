@@ -218,7 +218,7 @@ const JobDetails = ({
             <Button
               size="lg"
               className="bg-blue-600 hover:bg-blue-700"
-              onClick={onApply}
+              onClick={() => (window.location.href = "/contact")}
             >
               Apply Now
             </Button>

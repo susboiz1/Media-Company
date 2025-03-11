@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -54,17 +55,28 @@ const LoginForm = ({ onSubmit, defaultRole = "candidate" }: LoginFormProps) => {
 
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
 
-  const handleFormSubmit = (data: FormValues) => {
+  const { login } = useAuth();
+  const [loginError, setLoginError] = useState<string | null>(null);
+
+  const handleFormSubmit = async (data: FormValues) => {
     if (onSubmit) {
       onSubmit(data);
-    } else {
-      console.log("Login submitted:", data);
+      return;
+    }
+
+    setLoginError(null);
+    const { success, error } = await login(data.email, data.password);
+
+    if (success) {
       // Redirect based on role
       if (data.role === "hr") {
         navigate("/dashboard");
       } else {
         navigate("/candidate");
       }
+    } else {
+      setLoginError("Invalid email or password. Please try again.");
+      console.error("Login error:", error);
     }
   };
 
@@ -173,6 +185,9 @@ const LoginForm = ({ onSubmit, defaultRole = "candidate" }: LoginFormProps) => {
               </a>
             </div>
 
+            {loginError && (
+              <div className="text-red-500 text-sm mb-4">{loginError}</div>
+            )}
             <Button type="submit" className="w-full" disabled={isSubmitting}>
               {isSubmitting ? "Signing in..." : "Sign in"}
             </Button>

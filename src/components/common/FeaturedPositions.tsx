@@ -231,13 +231,13 @@ const FeaturedPositions = () => {
                       <Clock className="h-4 w-4 mr-1" />
                       <span>Posted {job.postedDate}</span>
                     </div>
-                    <Link to={`/jobs/${job.id}`}>
+                    <Link to="/contact">
                       <Button
                         variant="outline"
                         size="sm"
                         className="flex items-center"
                       >
-                        View Details
+                        Apply Now
                         <ChevronRight size={16} className="ml-1" />
                       </Button>
                     </Link>
