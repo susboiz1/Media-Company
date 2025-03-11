@@ -1,4 +1,4 @@
-import { supabase } from "./supabase";
+// Mock authentication service
 
 export type UserRole = "hr" | "candidate";
 
@@ -9,6 +9,36 @@ export interface AuthUser {
   role: UserRole;
 }
 
+// Mock user database
+const mockUsers: Record<
+  string,
+  {
+    id: string;
+    email: string;
+    password: string;
+    fullName: string;
+    role: UserRole;
+  }
+> = {
+  user1: {
+    id: "user1",
+    email: "hr@example.com",
+    password: "password123",
+    fullName: "HR Admin",
+    role: "hr",
+  },
+  user2: {
+    id: "user2",
+    email: "candidate@example.com",
+    password: "password123",
+    fullName: "John Candidate",
+    role: "candidate",
+  },
+};
+
+// Mock user session
+let currentUser: AuthUser | null = null;
+
 export async function signUp(
   email: string,
   password: string,
@@ -16,26 +46,25 @@ export async function signUp(
   role: UserRole,
 ) {
   try {
-    // Create the user in Supabase Auth
-    const { data: authData, error: authError } = await supabase.auth.signUp({
+    // Check if user already exists
+    const userExists = Object.values(mockUsers).some(
+      (user) => user.email === email,
+    );
+    if (userExists) {
+      throw new Error("User with this email already exists");
+    }
+
+    // Create new user
+    const id = `user${Object.keys(mockUsers).length + 1}`;
+    mockUsers[id] = {
+      id,
       email,
       password,
-    });
-
-    if (authError) throw authError;
-    if (!authData.user) throw new Error("User creation failed");
-
-    // Create the user profile in the users table
-    const { error: profileError } = await supabase.from("users").insert({
-      id: authData.user.id,
-      email,
-      full_name: fullName,
+      fullName,
       role,
-    });
+    };
 
-    if (profileError) throw profileError;
-
-    return { user: authData.user, error: null };
+    return { user: { id, email, fullName, role }, error: null };
   } catch (error) {
     console.error("Error signing up:", error);
     return { user: null, error };
@@ -44,30 +73,26 @@ export async function signUp(
 
 export async function signIn(email: string, password: string) {
   try {
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    // Find user by email
+    const user = Object.values(mockUsers).find((user) => user.email === email);
+    if (!user) {
+      throw new Error("User not found");
+    }
 
-    if (error) throw error;
+    // Check password
+    if (user.password !== password) {
+      throw new Error("Invalid password");
+    }
 
-    // Fetch the user's role from the users table
-    const { data: userData, error: userError } = await supabase
-      .from("users")
-      .select("role, full_name")
-      .eq("id", data.user.id)
-      .single();
-
-    if (userError) throw userError;
-
-    return {
-      user: {
-        ...data.user,
-        role: userData.role as UserRole,
-        fullName: userData.full_name,
-      },
-      error: null,
+    // Set current user
+    currentUser = {
+      id: user.id,
+      email: user.email,
+      fullName: user.fullName,
+      role: user.role,
     };
+
+    return { user: currentUser, error: null };
   } catch (error) {
     console.error("Error signing in:", error);
     return { user: null, error };
@@ -76,8 +101,7 @@ export async function signIn(email: string, password: string) {
 
 export async function signOut() {
   try {
-    const { error } = await supabase.auth.signOut();
-    if (error) throw error;
+    currentUser = null;
     return { error: null };
   } catch (error) {
     console.error("Error signing out:", error);
@@ -86,27 +110,5 @@ export async function signOut() {
 }
 
 export async function getCurrentUser(): Promise<AuthUser | null> {
-  try {
-    const { data } = await supabase.auth.getUser();
-    if (!data.user) return null;
-
-    // Fetch the user's role from the users table
-    const { data: userData, error: userError } = await supabase
-      .from("users")
-      .select("role, full_name")
-      .eq("id", data.user.id)
-      .single();
-
-    if (userError) throw userError;
-
-    return {
-      id: data.user.id,
-      email: data.user.email || "",
-      fullName: userData.full_name,
-      role: userData.role as UserRole,
-    };
-  } catch (error) {
-    console.error("Error getting current user:", error);
-    return null;
-  }
+  return currentUser;
 }
