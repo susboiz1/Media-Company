@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { useAuth } from "../../context/AuthContext";
 import {
   User,
   LogIn,
@@ -30,14 +29,20 @@ import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 
 interface HeaderProps {
+  isLoggedIn?: boolean;
+  userRole?: "hr" | "candidate" | null;
   onLogin?: () => void;
   onRegister?: () => void;
+  onLogout?: () => void;
 }
 
-const Header = ({ onLogin = () => {}, onRegister = () => {} }: HeaderProps) => {
-  const { user, logout, isLoading } = useAuth();
-  const isLoggedIn = !!user;
-  const userRole = user?.role || null;
+const Header = ({
+  isLoggedIn = false,
+  userRole = null,
+  onLogin = () => {},
+  onRegister = () => {},
+  onLogout = () => {},
+}: HeaderProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
@@ -188,7 +193,7 @@ const Header = ({ onLogin = () => {}, onRegister = () => {} }: HeaderProps) => {
                   <DropdownMenuItem asChild>
                     <Link to="/settings">Settings</Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={logout}>Logout</DropdownMenuItem>
+                  <DropdownMenuItem onClick={onLogout}>Logout</DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </>
@@ -297,7 +302,7 @@ const Header = ({ onLogin = () => {}, onRegister = () => {} }: HeaderProps) => {
                   <button
                     className="w-full flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md"
                     onClick={() => {
-                      logout();
+                      onLogout();
                       closeMenu();
                     }}
                   >
